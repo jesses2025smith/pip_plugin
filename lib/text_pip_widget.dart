@@ -14,8 +14,8 @@ class _TextPipWidgetState extends State<TextPipWidget> {
   final _scrollController = ScrollController();
   final PipPluginAndroid? pipPlugin =
       PipPluginPlatform.instance is PipPluginAndroid
-          ? PipPluginPlatform.instance as PipPluginAndroid
-          : null;
+      ? PipPluginPlatform.instance as PipPluginAndroid
+      : null;
 
   @override
   void dispose() {
@@ -54,10 +54,7 @@ class _PipContent extends StatelessWidget {
   final PipPluginAndroid pipPlugin;
   final ScrollController scrollController;
 
-  const _PipContent({
-    required this.pipPlugin,
-    required this.scrollController,
-  });
+  const _PipContent({required this.pipPlugin, required this.scrollController});
 
   void _scrollToEnd() {
     if (scrollController.hasClients) {
@@ -75,36 +72,41 @@ class _PipContent extends StatelessWidget {
       valueListenable: pipPlugin.configurationNotifier,
       builder: (BuildContext context, value, _) {
         return ValueListenableBuilder(
-            valueListenable: pipPlugin.text,
-            builder: (ctx, text, _) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                _scrollToEnd();
-              });
-              return Scaffold(
-                body: Container(
-                  color: value.backgroundColor,
-                  width: double.infinity,
-                  height: double.infinity,
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Align(
-                    alignment: getAlignment(value.textAlign),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      controller: scrollController,
-                      child: Text(
-                        text,
-                        textAlign: value.textAlign,
-                        style: TextStyle(
-                          color: value.textColor,
-                          fontSize: value.textSize,
-                          fontWeight: FontWeight.bold,
-                        ),
+          valueListenable: pipPlugin.text,
+          builder: (ctx, text, _) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollToEnd();
+            });
+            return Scaffold(
+              body: Container(
+                color: value.backgroundColor,
+                width: double.infinity,
+                height: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 10,
+                ),
+                child: Align(
+                  alignment: getAlignment(value.textAlign),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: scrollController,
+                    child: Text(
+                      text,
+                      textAlign: value.textAlign,
+                      softWrap: true,
+                      style: TextStyle(
+                        color: value.textColor,
+                        fontSize: value.textSize,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-              );
-            });
+              ),
+            );
+          },
+        );
       },
     );
   }
